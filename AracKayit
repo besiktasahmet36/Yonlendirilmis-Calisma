@@ -1,0 +1,180 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Araç_Kiralama
+{
+    public partial class frmAraçKayıt : Form
+    {
+        Araç_Kiralama arackiralama = new Araç_Kiralama();
+        public frmAraçKayıt()
+        {
+            InitializeComponent();
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnResim_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            pictureBox1.ImageLocation = openFileDialog1.FileName;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SeriCombo.Items.Clear();
+                if (MarkaCombo.SelectedIndex == 0)
+                {
+                    SeriCombo.Items.Add("Passat");
+                    SeriCombo.Items.Add("Jetta");
+                    SeriCombo.Items.Add("Golf");
+                 }
+                else if (MarkaCombo.SelectedIndex==1)
+                {
+                    SeriCombo.Items.Add("Megane");
+                    SeriCombo.Items.Add("Clio");
+                    
+                }
+                else if (MarkaCombo.SelectedIndex==2)
+                {
+                    SeriCombo.Items.Add("Linea");
+                    SeriCombo.Items.Add("Egea");
+                    
+                }
+                else if (MarkaCombo.SelectedIndex==3)
+                {
+                    SeriCombo.Items.Add("Fiesta");
+                    SeriCombo.Items.Add("Focus");
+                 
+                }
+            }
+            catch 
+            {
+
+                ;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string cümle = "insert into arac(plaka,marka,seri,yil,renk,km,yakit,kiraucreti,resim,tarih,durumu)values(@plaka,@marka,@seri,@yil,@renk,@km,@yakit,@kiraucreti,@resim,@tarih,@durumu)";
+            SqlCommand komut2 = new SqlCommand();
+            komut2.Parameters.AddWithValue("@plaka",Plakatxt.Text);
+            komut2.Parameters.AddWithValue("@marka", MarkaCombo.Text);
+            komut2.Parameters.AddWithValue("@seri", SeriCombo.Text);
+            komut2.Parameters.AddWithValue("@yil", Yiltxt.Text);
+            komut2.Parameters.AddWithValue("@renk", Renktxt.Text);
+            komut2.Parameters.AddWithValue("@km", Kmtxt.Text);
+            komut2.Parameters.AddWithValue("@yakit", YakitCombo.Text);
+            komut2.Parameters.AddWithValue("@kiraucreti", int.Parse(Ucrettxt.Text));
+            komut2.Parameters.AddWithValue("@resim", pictureBox1.ImageLocation);
+            komut2.Parameters.AddWithValue("@tarih", DateTime.Now.ToString());
+            komut2.Parameters.AddWithValue("@durumu", "BOS");
+            arackiralama.ekle_sil_güncelle(komut2,cümle);
+            SeriCombo.Items.Clear();
+            foreach (Control item in Controls) if (item is TextBox) item.Text = "";
+            foreach (Control item in Controls) if (item is ComboBox) item.Text = "";
+            pictureBox1.ImageLocation = "";
+
+            MessageBox.Show("Aracınız eklendi");
+
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Ucrettxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Kmtxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Renktxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Yiltxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void YakitCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SeriCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Plakatxt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmAraçKayıt_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
