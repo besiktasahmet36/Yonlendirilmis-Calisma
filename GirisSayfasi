@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Araç_Kiralama
+{
+    public partial class frmGirisSayfası : Form
+    {
+        public frmGirisSayfası()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text==""||textBox2.Text=="")
+            {
+                MessageBox.Show("Boş bırakmayınız");
+
+            }
+            else
+            {
+                if (textBox1.Text=="admin"&&textBox2.Text=="123456")
+                    
+                {
+                    frmAnaSayfa frmgiris = new frmAnaSayfa();
+                    frmgiris.ShowDialog();
+                    this.Close();
+                  
+                }
+               
+                else
+                {
+                    MessageBox.Show("Giriş bilgilerinizi kontrol ediniz");
+                }
+                
+            }
+           
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void frmGirisSayfası_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text == "" || textBox2.Text == "")
+            {
+                MessageBox.Show("Boş bırakmayınız");
+
+            }
+            else
+            {
+                if (textBox1.Text == "ahmet" && textBox2.Text == "123456")
+
+                {
+                    frmKullaniciSayfasi frmkullanici = new frmKullaniciSayfasi();
+                    frmkullanici.ShowDialog();
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Giriş bilgilerinizi kontrol ediniz");
+                }
+            }
+            }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
