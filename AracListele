@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Data.SqlClient;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Araç_Kiralama
+{
+    public partial class frmAracListele : Form
+    {
+        Araç_Kiralama arackiralama = new Araç_Kiralama();
+        public frmAracListele()
+        {
+            InitializeComponent();
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            DataGridViewRow satır = dataGridView1.CurrentRow;
+            Plakatxt.Text = satır.Cells["plaka"].Value.ToString();
+            MarkaCombo.Text = satır.Cells["marka"].Value.ToString();
+            SeriCombo.Text = satır.Cells["seri"].Value.ToString();
+            Yiltxt.Text = satır.Cells["yil"].Value.ToString();
+            Renktxt.Text = satır.Cells["renk"].Value.ToString();
+            Kmtxt.Text = satır.Cells["km"].Value.ToString();
+            YakitCombo.Text = satır.Cells["yakit"].Value.ToString();
+            Ucrettxt.Text = satır.Cells["kiraucreti"].Value.ToString();
+            pictureBox2.ImageLocation = satır.Cells["resim"].Value.ToString();
+           
+
+        }
+
+        private void frmAracListele_Load(object sender, EventArgs e)
+        {
+            YenileAraclarListesi();
+            comboAraclar.SelectedIndex = 0;
+          
+
+        }
+
+        private void YenileAraclarListesi()
+        {
+            string cümle = "select * from arac";
+            SqlDataAdapter adtr2 = new SqlDataAdapter();
+            dataGridView1.DataSource = arackiralama.Listele(adtr2, cümle);
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btnResim_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.ShowDialog();
+            pictureBox2.ImageLocation = openFileDialog1.FileName;
+
+
+        }
+
+        private void btnGuncelle_Click(object sender, EventArgs e)
+        {
+            string cümle = "update arac set marka=@marka,seri=@seri,yil=@yil,renk=@renk,km=@km,yakit=@yakit,kiraucreti=@kiraucreti,resim=@resim,tarih=@tarih where plaka=@plaka";
+            SqlCommand komut2 = new SqlCommand();
+            komut2.Parameters.AddWithValue("@plaka", Plakatxt.Text);
+            komut2.Parameters.AddWithValue("@marka", MarkaCombo.Text);
+            komut2.Parameters.AddWithValue("@seri", SeriCombo.Text);
+            komut2.Parameters.AddWithValue("@yil", Yiltxt.Text);
+            komut2.Parameters.AddWithValue("@renk", Renktxt.Text);
+            komut2.Parameters.AddWithValue("@km", Kmtxt.Text);
+            komut2.Parameters.AddWithValue("@yakit", YakitCombo.Text);
+            komut2.Parameters.AddWithValue("@kiraucreti", int.Parse(Ucrettxt.Text));
+            komut2.Parameters.AddWithValue("@resim", pictureBox2.ImageLocation);
+            komut2.Parameters.AddWithValue("@tarih", DateTime.Now.ToString());
+            arackiralama.ekle_sil_güncelle(komut2, cümle);
+            SeriCombo.Items.Clear();
+            foreach (Control item in Controls) if (item is TextBox) item.Text = "";
+            foreach (Control item in Controls) if (item is ComboBox) item.Text = "";
+            pictureBox2.ImageLocation = "";
+            YenileAraclarListesi();
+
+            MessageBox.Show("Aracınız güncellenmiştir");
+
+        }
+
+        private void btnSil_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow satır = dataGridView1.CurrentRow;
+            string cümle = "delete from arac where plaka='"+satır.Cells["plaka"].Value.ToString()+"'";
+            SqlCommand komut2 = new SqlCommand();
+            arackiralama.ekle_sil_güncelle(komut2, cümle);
+            YenileAraclarListesi();
+            pictureBox2.ImageLocation = "";
+            SeriCombo.Items.Clear();
+            foreach (Control item in Controls) if (item is TextBox) item.Text = "";
+            foreach (Control item in Controls) if (item is ComboBox) item.Text = "";
+            MessageBox.Show("Aracınız silinmiştir");
+        }
+
+        private void MarkaCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                SeriCombo.Items.Clear();
+                if (MarkaCombo.SelectedIndex == 0)
+                {
+                    SeriCombo.Items.Add("Astra");
+                    SeriCombo.Items.Add("Vectra");
+                    SeriCombo.Items.Add("Corsa");
+                }
+                else if (MarkaCombo.SelectedIndex == 1)
+                {
+                    SeriCombo.Items.Add("Megane");
+                    SeriCombo.Items.Add("Clio");
+
+                }
+                else if (MarkaCombo.SelectedIndex == 2)
+                {
+                    SeriCombo.Items.Add("Linea");
+                    SeriCombo.Items.Add("Egea");
+
+                }
+                else if (MarkaCombo.SelectedIndex == 3)
+                {
+                    SeriCombo.Items.Add("Fiesta");
+                    SeriCombo.Items.Add("Focus");
+
+                }
+            }
+            catch
+            {
+
+                ;
+            }
+        }
+
+        private void comboAraclar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (comboAraclar.SelectedIndex==0)
+                {
+                    YenileAraclarListesi();
+                }
+                if (comboAraclar.SelectedIndex ==1)
+                {
+                    string cümle = "select * from arac where durumu='BOS'";
+                    SqlDataAdapter adtr2 = new SqlDataAdapter();
+                    dataGridView1.DataSource = arackiralama.Listele(adtr2, cümle);
+                }
+                if (comboAraclar.SelectedIndex == 2)
+                {
+                    string cümle = "select * from arac where durumu='DOLU'";
+                    SqlDataAdapter adtr2 = new SqlDataAdapter();
+                    dataGridView1.DataSource = arackiralama.Listele(adtr2, cümle); 
+                }
+            }
+            catch 
+            {
+
+                ;
+            }
+        }
+
+        private void btnIptal_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
